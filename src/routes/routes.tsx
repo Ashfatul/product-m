@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import ProductList from "../components/ProductList/ProductList";
 import Home from "../components/Home/Home";
+import ProductDetails from "../components/ProductDetails/ProductDetails";
 
 export const Route = createBrowserRouter([
   {
@@ -13,6 +14,6 @@ export const Route = createBrowserRouter([
   },
   {
     path: "/products/:id",
-    element: <div>Product Details</div>,
+    element: <ProductDetails />,
   }
 ]);
