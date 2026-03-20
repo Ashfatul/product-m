@@ -1,5 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
 import styled from "styled-components";
+import { colors, transitions } from "../theme/colors";
 
 const LayoutContainer = styled.div`
   display: flex;
@@ -8,12 +9,13 @@ const LayoutContainer = styled.div`
 `;
 
 const Header = styled.header`
-  background-color: #001529;
+  background-color: ${colors.headerBg};
   padding: 1rem 0;
-  color: white;
+  color: ${colors.headerText};
   position: sticky;
   top: 0;
-  z-index: 10000;
+  z-index: 100;
+  box-shadow: 0 2px 8px ${colors.shadowColor};
 `;
 
 const HeaderContent = styled.div`
@@ -32,13 +34,14 @@ const HeaderInfo = styled.div`
 
 const HeaderTitle = styled.h1`
   margin: 0;
-  color: #fff;
+  color: ${colors.headerText};
   font-size: 24px;
+  font-weight: 700;
 `;
 
 const HeaderSubtitle = styled.p`
   margin: 0.25rem 0 0 0;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.75);
   font-size: 14px;
 `;
 
@@ -48,13 +51,14 @@ const Nav = styled.nav`
 `;
 
 const NavLink = styled(Link)`
-  color: white;
+  color: ${colors.headerText};
   text-decoration: none;
   font-size: 16px;
-  transition: color 0.3s ease;
+  font-weight: 500;
+  transition: color ${transitions.normal};
   
   &:hover {
-    color: #1890ff;
+    color: ${colors.primaryLight};
   }
 `;
 
@@ -67,13 +71,14 @@ const Main = styled.main`
 `;
 
 const Footer = styled.footer`
-  background-color: #001529;
+  background-color: ${colors.headerBg};
   padding: 1rem;
-  color: white;
+  color: ${colors.headerText};
   text-align: center;
   position: sticky;
   bottom: 0;
-  z-index: 10000;
+  z-index: 100;
+  box-shadow: 0 -2px 8px ${colors.shadowColor};
 `;
 
 export default function BaseLayout({ children }: { children: React.ReactNode }) {
@@ -82,10 +87,10 @@ export default function BaseLayout({ children }: { children: React.ReactNode }) 
       <Header>
         <HeaderContent>
           <Link to='/' style={{ textDecoration: 'none' }}>
-          <HeaderInfo>
-            <HeaderTitle>Product Management</HeaderTitle>
-            <HeaderSubtitle>A simple product management app</HeaderSubtitle>
-          </HeaderInfo>
+            <HeaderInfo>
+              <HeaderTitle>Product Management</HeaderTitle>
+              <HeaderSubtitle>A simple product management app</HeaderSubtitle>
+            </HeaderInfo>
           </Link>
           <Nav>
             <NavLink to="/">Home</NavLink>

@@ -1,44 +1,64 @@
-$system_primary: var(--primary-color, #1890ff);
-$system_secondary: var(--secondary-color, #5555559c);
-$system_font: var(--font-family, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
-$system_bg: var(--background-color, #ffffff);
-$system_text: var(--text-color, #000000);
+// Modern Color Palette
+$primary_color: #5b4cdb;
+$primary_light: #7c6ff5;
+$primary_dark: #3f2d8f;
+$secondary_color: #6c757d;
+$success_color: #10b981;
+$warning_color: #f59e0b;
+$danger_color: #ef4444;
+$text_primary: #1f2937;
+$text_secondary: #6b7280;
+$text_light: #9ca3af;
+$bg_primary: #ffffff;
+$bg_secondary: #f9fafb;
+$bg_tertiary: #f3f4f6;
+$border_color: #e5e7eb;
+$shadow_color: rgba(0, 0, 0, 0.1);
+
+// Legacy variable support
+$system_primary: $primary_color;
+$system_secondary: $secondary_color;
+$system_font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+$system_bg: $bg_secondary;
+$system_text: $text_primary;
 $baseFontSize: 16px;
 
-
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: $system_font;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: $system_font;
 }
 
-body{
-    padding: 0px;
-    background-color: $system_bg;
-    color: $system_text;
-    font-size: $baseFontSize;
+body {
+  padding: 0;
+  background: linear-gradient(135deg, $bg_secondary 0%, $bg_tertiary 100%);
+  background-attachment: fixed;
+  color: $system_text;
+  font-size: $baseFontSize;
+  min-height: 100vh;
 }
 
-.product_table{
-    margin-top: 20px;
+.product_table {
+  margin-top: 20px;
 }
 
 .applied_filter {
-    font-size: 14px;
-    color: $system_secondary;
-    font-weight: 300;
-    font-style: italic;
+  font-size: 14px;
+  color: $text_secondary;
+  font-weight: 300;
+  font-style: italic;
 
-    b{
-        text-decoration: underline;
-        font-weight: 600;
-    }
+  b {
+    text-decoration: underline;
+    font-weight: 600;
+    color: $text_primary;
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: $system_text;
-    margin-bottom: 16px;
-    font-weight: 600;
-    line-height: 1.2;
+  color: $text_primary;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.2;
 }

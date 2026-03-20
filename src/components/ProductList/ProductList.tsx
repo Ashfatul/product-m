@@ -8,6 +8,7 @@ import { Button, Dropdown, Tooltip } from 'antd';
 import useProductsCategory from '../../query/productCategoryQuery';
 import useProductStore from '../../store/store';
 import styled from 'styled-components';
+import { colors, transitions } from '../../theme/colors';
 
 type SearchProps = GetProps<typeof Input.Search>;
 
@@ -16,18 +17,19 @@ const ActionIconButton = styled(Link)`
   justify-content: center;
   padding: 6px 8px;
   border-radius: 4px;
-  color: #1890ff;
-  transition: all 0.3s ease;
+  color: ${colors.primary};
+  transition: all ${transitions.normal};
   height: 32px;
   width: 32px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #1890ff;
+  border: 1px solid ${colors.primary};
   
   &:hover {
-    background-color: #e6f7ff;
-    color: #0050b3;
+    background-color: ${colors.bgTertiary};
+    color: ${colors.primaryDark};
+    border-color: ${colors.primaryDark};
   }
   
   font-size: 16px;

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { colors, transitions, shadows } from "../../theme/colors";
 
 const HeroContainer = styled.div`
   display: flex;
@@ -8,10 +9,11 @@ const HeroContainer = styled.div`
   justify-content: center;
   min-height: calc(100vh - 300px);
   text-align: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, ${colors.primaryDark} 0%, ${colors.primary} 100%);
   border-radius: 12px;
   padding: 4rem 2rem;
   color: white;
+  box-shadow: ${shadows.xl};
 `;
 
 const HeroTitle = styled.h1`
@@ -19,7 +21,7 @@ const HeroTitle = styled.h1`
   font-weight: 700;
   margin: 0 0 1.5rem 0;
   line-height: 1.2;
-  color: #fff;
+  color: white;
   
   @media (max-width: 768px) {
     font-size: 2.5rem;
@@ -32,24 +34,26 @@ const HeroSubtitle = styled.p`
   opacity: 0.95;
   max-width: 600px;
   line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
 `;
 
 const HeroButton = styled(Link)`
   display: inline-block;
   padding: 1rem 2.5rem;
-  background-color: white;
-  color: #667eea;
+  background-color: ${colors.bgPrimary};
+  color: ${colors.primary};
   text-decoration: none;
   border-radius: 8px;
   font-size: 1.1rem;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all ${transitions.normal};
   cursor: pointer;
+  box-shadow: ${shadows.md};
   
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    background-color: #f0f0f0;
+    box-shadow: ${shadows.lg};
+    background-color: ${colors.bgSecondary};
   }
 `;
 
