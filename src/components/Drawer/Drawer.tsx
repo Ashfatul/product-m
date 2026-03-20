@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Col, Drawer, Form, Input, Row, InputNumber, Select, Space, message } from 'antd';
 
@@ -8,6 +8,8 @@ interface DrawerComponentProps {
   product?: any;
 }
 
+
+
 export default function DrawerComponent({ open: externalOpen, onClose: externalOnClose, product }: DrawerComponentProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [form] = Form.useForm();
@@ -15,21 +17,6 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
   // Use external state if provided, otherwise use internal state
   const isOpen = externalOpen !== undefined ? externalOpen : internalOpen;
   const handleClose = externalOnClose || (() => setInternalOpen(false));
-
-  const showDrawer = () => {
-    setInternalOpen(true);
-    if (product) {
-      form.setFieldsValue({
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        stock: product.stock,
-        category: product.category,
-        rating: product.rating,
-      });
-    }
-  };
-
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
@@ -41,13 +28,24 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
     }
   };
 
+  // Initialize form values when product data is available
+  useEffect(() => {
+    if (product) {
+      form.setFieldsValue({
+        title: product.title,
+        price: product.price,
+        stock: product.stock,
+        category: product.category,
+        rating: product.rating,
+        description: product.description,
+      });
+    } else {
+      form.resetFields();
+    }
+  }, [product, form]);
+
   return (
     <>
-      {product ? null : (
-        <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
-          New Product
-        </Button>
-      )}
       <Drawer
         title={product ? "Edit Product" : "Create New Product"}
         size={600}
