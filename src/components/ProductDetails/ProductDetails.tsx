@@ -1,13 +1,14 @@
 import { useParams } from "react-router-dom";
 import { Row, Col, Card, Button, Rate, Badge, Divider, Space, Descriptions, Image, Spin, Empty } from "antd";
 import { EditOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DrawerComponent from "../Drawer/Drawer";
 import useProductDetails from "../../query/productDetailsQuery";
 
 export default function ProductDetails() {
   const { id } = useParams();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [displayProduct, setDisplayProduct] = useState<any>(null);
 
   const { productDetails: product, isLoading, error } = useProductDetails({id});
 
@@ -19,7 +20,23 @@ export default function ProductDetails() {
     setIsDrawerOpen(false);
   };
 
-  if (!product) {
+  useEffect(() => {
+    if (product) {
+      // if in localstorage there is a modified product with the same id, use that instead of the fetched product
+      const modifiedProducts = localStorage.getItem('modifiedProducts');
+      if (modifiedProducts) {
+        const modifiedProductsArray = JSON.parse(modifiedProducts);
+        const modifiedProduct = modifiedProductsArray.find((p: any) => p.id === displayProduct?.id);
+        if (modifiedProduct) {
+          setDisplayProduct(modifiedProduct);
+          return;
+        }
+      }
+      setDisplayProduct(product);
+    }
+  }, [product]);
+
+  if (!displayProduct) {
     return <Empty description="Product not found" />;
   }
 
@@ -30,8 +47,8 @@ export default function ProductDetails() {
         <Col xs={24} sm={24} md={10}>
           <Card>
             <Image
-              src={product.images[0]}
-              alt={product.title}
+              src={displayProduct?.images[0]}
+              alt={displayProduct?.title}
               style={{ width: "100%" }}
               preview
             />
@@ -45,8 +62,8 @@ export default function ProductDetails() {
             <Space orientation="vertical" size="large" style={{ width: "100%" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
                 <div>
-                  <Badge count={product.category} style={{ backgroundColor: "#108ee9" }} />
-                  <h1 style={{ margin: "0 0 8px 0" }}>{product.title}</h1>
+                  <Badge count={displayProduct?.category} style={{ backgroundColor: "#108ee9" }} />
+                  <h1 style={{ margin: "0 0 8px 0" }}>{displayProduct?.title}</h1>
                 </div>
                 <Button 
                   type="primary" 
@@ -59,7 +76,7 @@ export default function ProductDetails() {
 
               {/* Price */}
               <div style={{ backgroundColor: "#fafafa", padding: "16px", borderRadius: "4px" }}>
-                <h2 style={{ color: "#f5222d", fontSize: "40px" }}>${product.price.toFixed(2)}</h2>
+                <h2 style={{ color: "#f5222d", fontSize: "40px" }}>${displayProduct?.price.toFixed(2)}</h2>
               </div>
 
               {/* Product Metrics */}
@@ -68,10 +85,10 @@ export default function ProductDetails() {
                   <div>
                     <strong style={{ fontSize: "14px", color: "#999" }}>Rating</strong>
                     <div style={{ marginTop: "8px" }}>
-                      <Rate value={product.rating} disabled allowHalf />
+                      <Rate value={displayProduct?.rating} disabled allowHalf />
                       <br />
-                      <span>{product.rating} / 5</span>
-                      <span style={{ marginLeft: "8px" }}>({Array.isArray(product.reviews) ? product.reviews.length : product.reviews} reviews)</span>
+                      <span>{displayProduct?.rating} / 5</span>
+                      <span style={{ marginLeft: "8px" }}>({Array.isArray(displayProduct?.reviews) ? displayProduct?.reviews.length : displayProduct?.reviews} reviews)</span>
                     </div>
                   </div>
                 </Col>
@@ -80,8 +97,8 @@ export default function ProductDetails() {
                     <strong style={{ fontSize: "14px", color: "#999" }}>Stock Status</strong>
                     <div style={{ marginTop: "8px" }}>
                       <Badge 
-                        status={product.stock > 0 ? "success" : "error"} 
-                        text={`${product.stock} ${product.stock === 1 ? "item" : "items"} available`}
+                        status={displayProduct?.stock > 0 ? "success" : "error"} 
+                        text={`${displayProduct?.stock} ${displayProduct?.stock === 1 ? "item" : "items"} available`}
                       />
                     </div>
                   </div>
@@ -93,7 +110,7 @@ export default function ProductDetails() {
               {/* Description */}
               <div>
                 <strong style={{ fontSize: "14px", color: "#999" }}>Description</strong>
-                <p style={{ marginTop: "8px", lineHeight: "1.6" }}>{product.description}</p>
+                <p style={{ marginTop: "8px", lineHeight: "1.6" }}>{displayProduct?.description}</p>
               </div>
 
               {/* Product Specifications */}
@@ -103,19 +120,19 @@ export default function ProductDetails() {
                 items={[
                   {
                     label: "Category",
-                    children: product.category,
+                    children: displayProduct?.category,
                   },
                   {
                     label: "Stock",
-                    children: product.stock,
+                    children: displayProduct?.stock,
                   },
                   {
                     label: "Product ID",
-                    children: product.id,
+                    children: displayProduct?.id,
                   },
                   {
                     label: "Rating",
-                    children: `${product.rating} / 5`,
+                    children: `${displayProduct?.rating} / 5`,
                   },
                 ]}
               />

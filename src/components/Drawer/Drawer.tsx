@@ -17,9 +17,32 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
   const handleClose = externalOnClose || (() => setInternalOpen(false));
   const handleSubmit = async () => {
     try {
-      const productInfo = product;
       const values = await form.validateFields();
-      console.log('Form values:', values);
+
+      const modifiedProducts = localStorage.getItem('modifiedProducts');
+      const modifiedProductsArray = modifiedProducts ? JSON.parse(modifiedProducts) : [];
+
+      const updatedProduct = {
+        id: product.id,
+        title: values.title,
+        thumbnail: values.imageUrl,
+        price: values.price,
+        stock: values.stock,
+        category: values.category,
+        rating: values.rating,
+        description: values.description,
+      };
+
+      const index = modifiedProductsArray.findIndex((p: any) => p.id === product.id);
+
+      if (index !== -1) {
+        modifiedProductsArray[index] = updatedProduct;
+      } else {
+        modifiedProductsArray.push(updatedProduct);
+      }
+
+      localStorage.setItem('modifiedProducts', JSON.stringify(modifiedProductsArray));
+
       message.success('Product updated successfully');
       handleClose();
     } catch (error) {
@@ -32,7 +55,7 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
     if (product) {
       form.setFieldsValue({
         title: product.title,
-        imageUrl: product.thumbnail,
+        imageUrl: product.images[0],
         price: product.price,
         stock: product.stock,
         category: product.category,
@@ -71,7 +94,7 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
             <Col span={24}>
               <Form.Item
                 name="title"
-                label="Product Title"
+                label="Product Title *"
                 rules={[{ required: true, message: 'Please enter product title' }]}
               >
                 <Input placeholder="Enter product title" />
@@ -82,8 +105,8 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
             <Col span={24}>
               <Form.Item
                 name="imageUrl"
-                label="Thumbnail Image URL"
-                rules={[{ required: true, message: 'Please enter thumbnail image URL' }]}
+                label="Image URL *"
+                rules={[{ required: true, message: 'Please enter image URL' }]}
               >
                 <Input placeholder="Enter image URL" />
               </Form.Item>
@@ -93,7 +116,7 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
             <Col span={12}>
               <Form.Item
                 name="price"
-                label="Price"
+                label="Price *"
                 rules={[{ required: true, message: 'Please enter price' }]}
               >
                 <InputNumber 
@@ -108,7 +131,7 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
             <Col span={12}>
               <Form.Item
                 name="stock"
-                label="Stock"
+                label="Stock *"
                 rules={[{ required: true, message: 'Please enter stock' }]}
               >
                 <InputNumber 
@@ -123,7 +146,7 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
             <Col span={12}>
               <Form.Item
                 name="category"
-                label="Category"
+                label="Category *"
                 rules={[{ required: true, message: 'Please select category' }]}
               >
                 <Select
@@ -140,7 +163,7 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
             <Col span={12}>
               <Form.Item
                 name="rating"
-                label="Rating"
+                label="Rating *"
                 rules={[{ required: true, message: 'Please enter rating' }]}
               >
                 <InputNumber 
@@ -157,7 +180,7 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
             <Col span={24}>
               <Form.Item
                 name="description"
-                label="Description"
+                label="Description *"
                 rules={[{ required: true, message: 'Please enter product description' }]}
               >
                 <Input.TextArea rows={4} placeholder="Enter product description" />
