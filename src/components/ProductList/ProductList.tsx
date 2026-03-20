@@ -1,4 +1,4 @@
-import { Table, type GetProps } from 'antd';
+import { Table, type GetProps, Flex } from 'antd';
 import useProducts from '../../query/productQuery';
 import { Link } from 'react-router-dom';
 import { Input } from 'antd';
@@ -11,9 +11,12 @@ type SearchProps = GetProps<typeof Input.Search>;
 
 export default function ProductList() {
   const [page, setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+
   const { products, isLoading, isError, total } = useProducts({
     limit: parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),
     skip: (page - 1) * parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),
+    ...(searchQuery && { filter: 'search', q: searchQuery }),
   });
   const { Search } = Input;
 
@@ -56,8 +59,11 @@ export default function ProductList() {
     }
   ];
 
-  // onSearch is the function that will be called when the user clicks the search button. It takes the value of the search input and logs it to the console.
-  const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
+  // onSearch is the function that will be called when the user clicks the search button.
+  const onSearch: SearchProps['onSearch'] = (value) => {
+    setSearchQuery(value);
+    setPage(1); // Reset to first page on search
+  };
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     message.info('Click on left button.');
@@ -104,13 +110,16 @@ export default function ProductList() {
   return (
     <div>
       <h1>Product List</h1>
-      <Search placeholder="input search text" allowClear onSearch={onSearch} />
+      <Flex gap="10px" justify='center' align='center'>
+      <Search placeholder="input search text" allowClear onSearch={onSearch} style={{width: '300px'}} />
       <Dropdown menu={menuProps}>
         <Button onClick={handleButtonClick} icon={<DownOutlined />} iconPlacement="end">
           Button
         </Button>
       </Dropdown>
+      </Flex>
       <Table 
+      className='product_table'
       dataSource={dataSource} 
       columns={columns} 
       rowKey="id"

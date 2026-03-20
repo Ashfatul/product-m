@@ -1,11 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../utility/api";
 
+const getEndpoint = (params: any) => {
+  switch (params?.filter) {
+    case 'search':
+      return '/products/search';
+    case 'category':
+      return '/products/category';
+    default:
+      return '/products';
+  }
+}
+
 const useProducts = (params?: any) => {
-  console.log('Fetching products with params:', params);
   const { data, isPending, error } = useQuery({
     queryKey: ['products', params],
-    queryFn: () => api.get('/products', { params }).then(r => r.data),
+    queryFn: () => {
+      const { filter, ...actualParams } = params;
+      return api.get(getEndpoint(params), { params: actualParams }).then(r => r.data);
+    },
   })
 
   return {
