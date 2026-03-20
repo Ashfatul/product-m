@@ -1,39 +1,58 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space } from 'antd';
-import type { InputProps } from 'antd';
+import { Button, Col, Drawer, Form, Input, Row, InputNumber, Select, Space, message } from 'antd';
 
-const UrlInput: React.FC<InputProps> = (props) => {
-  return (
-    <Space.Compact>
-      <Space.Addon>http://</Space.Addon>
-      <Input style={{ width: '100%' }} {...props} />
-      <Space.Addon>.com</Space.Addon>
-    </Space.Compact>
-  );
-};
+interface DrawerComponentProps {
+  open?: boolean;
+  onClose?: () => void;
+  product?: any;
+}
 
-export default function DrawerComponent() {
-  const [open, setOpen] = useState(false);
+export default function DrawerComponent({ open: externalOpen, onClose: externalOnClose, product }: DrawerComponentProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const [form] = Form.useForm();
+
+  // Use external state if provided, otherwise use internal state
+  const isOpen = externalOpen !== undefined ? externalOpen : internalOpen;
+  const handleClose = externalOnClose || (() => setInternalOpen(false));
 
   const showDrawer = () => {
-    setOpen(true);
+    setInternalOpen(true);
+    if (product) {
+      form.setFieldsValue({
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        stock: product.stock,
+        category: product.category,
+        rating: product.rating,
+      });
+    }
   };
 
-  const onClose = () => {
-    setOpen(false);
+  const handleSubmit = async () => {
+    try {
+      const values = await form.validateFields();
+      console.log('Form values:', values);
+      message.success('Product updated successfully');
+      handleClose();
+    } catch (error) {
+      console.error('Validation failed:', error);
+    }
   };
 
   return (
     <>
-      <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
-        New account
-      </Button>
+      {product ? null : (
+        <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
+          New Product
+        </Button>
+      )}
       <Drawer
-        title="Create a new account"
-        size={720}
-        onClose={onClose}
-        open={open}
+        title={product ? "Edit Product" : "Create New Product"}
+        size={600}
+        onClose={handleClose}
+        open={isOpen}
         styles={{
           body: {
             paddingBottom: 80,
@@ -41,91 +60,85 @@ export default function DrawerComponent() {
         }}
         extra={
           <Space>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button onClick={onClose} type="primary">
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleSubmit} type="primary">
               Submit
             </Button>
           </Space>
         }
       >
-        <Form layout="vertical" requiredMark={false}>
+        <Form layout="vertical" requiredMark={false} form={form}>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24}>
               <Form.Item
-                name="name"
-                label="Name"
-                rules={[{ required: true, message: 'Please enter user name' }]}
+                name="title"
+                label="Product Title"
+                rules={[{ required: true, message: 'Please enter product title' }]}
               >
-                <Input placeholder="Please enter user name" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="url"
-                label="Url"
-                rules={[{ required: true, message: 'Please enter url' }]}
-              >
-                <UrlInput placeholder="Please enter url" />
+                <Input placeholder="Enter product title" />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="owner"
-                label="Owner"
-                rules={[{ required: true, message: 'Please select an owner' }]}
+                name="price"
+                label="Price"
+                rules={[{ required: true, message: 'Please enter price' }]}
               >
-                <Select
-                  placeholder="Please select an owner"
-                  options={[
-                    { label: 'Xiaoxiao Fu', value: 'xiao' },
-                    { label: 'Maomao Zhou', value: 'mao' },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="type"
-                label="Type"
-                rules={[{ required: true, message: 'Please choose the type' }]}
-              >
-                <Select
-                  placeholder="Please choose the type"
-                  options={[
-                    { label: 'private', value: 'private' },
-                    { label: 'public', value: 'public' },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="approver"
-                label="Approver"
-                rules={[{ required: true, message: 'Please choose the approver' }]}
-              >
-                <Select
-                  placeholder="Please choose the approver"
-                  options={[
-                    { label: 'Jack Ma', value: 'jack' },
-                    { label: 'Tom Liu', value: 'tom' },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="dateTime"
-                label="DateTime"
-                rules={[{ required: true, message: 'Please choose the dateTime' }]}
-              >
-                <DatePicker.RangePicker
+                <InputNumber 
+                  placeholder="Enter price" 
+                  prefix="$"
                   style={{ width: '100%' }}
-                  getPopupContainer={(trigger) => trigger.parentElement!}
+                  min={0}
+                  step={0.01}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="stock"
+                label="Stock"
+                rules={[{ required: true, message: 'Please enter stock' }]}
+              >
+                <InputNumber 
+                  placeholder="Enter stock quantity" 
+                  style={{ width: '100%' }}
+                  min={0}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="category"
+                label="Category"
+                rules={[{ required: true, message: 'Please select category' }]}
+              >
+                <Select
+                  placeholder="Select category"
+                  options={[
+                    { label: 'Electronics', value: 'Electronics' },
+                    { label: 'Clothing', value: 'Clothing' },
+                    { label: 'Books', value: 'Books' },
+                    { label: 'Home', value: 'Home' },
+                  ]}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="rating"
+                label="Rating"
+                rules={[{ required: true, message: 'Please enter rating' }]}
+              >
+                <InputNumber 
+                  placeholder="Enter rating" 
+                  style={{ width: '100%' }}
+                  min={0}
+                  max={5}
+                  step={0.1}
                 />
               </Form.Item>
             </Col>
@@ -135,14 +148,9 @@ export default function DrawerComponent() {
               <Form.Item
                 name="description"
                 label="Description"
-                rules={[
-                  {
-                    required: true,
-                    message: 'please enter url description',
-                  },
-                ]}
+                rules={[{ required: true, message: 'Please enter product description' }]}
               >
-                <Input.TextArea rows={4} placeholder="please enter url description" />
+                <Input.TextArea rows={4} placeholder="Enter product description" />
               </Form.Item>
             </Col>
           </Row>
