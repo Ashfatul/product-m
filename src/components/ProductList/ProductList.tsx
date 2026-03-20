@@ -2,7 +2,7 @@ import { Table, type GetProps, Flex } from 'antd';
 import useProducts from '../../query/productQuery';
 import { Link } from 'react-router-dom';
 import { Input } from 'antd';
-import { DownOutlined, EyeOutlined } from '@ant-design/icons';
+import { DownOutlined, EyeOutlined, ClearOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Dropdown, Tooltip } from 'antd';
 import useProductsCategory from '../../query/productCategoryQuery';
@@ -42,6 +42,7 @@ export default function ProductList() {
   const setSearchQuery = useProductStore((state) => state.setSearchQuery);
   const selectedCategory = useProductStore((state) => state.selectedCategory);
   const setSelectedCategory = useProductStore((state) => state.setSelectedCategory);
+  const resetFilters = useProductStore((state) => state.resetFilters);
 
   const { products, total } = useProducts({
     limit: parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),
@@ -109,6 +110,11 @@ export default function ProductList() {
     setPage(1); // Reset to first page on search
   };
 
+  const handleResetFilters = () => {
+    resetFilters();
+    setPage(1); // Reset to first page on filters reset
+  };
+
   const handleMenuClick: MenuProps['onClick'] = (e) => {
     setSelectedCategory(e.key);
   };
@@ -128,7 +134,7 @@ export default function ProductList() {
     <div>
       <Flex gap="10px" justify='space-between' align='center' wrap>
         <h1 className='mb-0'>Product List</h1>
-        <Flex gap='10px' align='center'>
+        <Flex gap='10px' align='center' wrap>
           <Search placeholder="input search text" allowClear onSearch={onSearch} style={{ width: '300px' }} />
           <Dropdown menu={menuProps}>
             <Button icon={<DownOutlined />} iconPlacement="end">
@@ -155,12 +161,25 @@ export default function ProductList() {
             {selectedCategory && 'Filtering by category: '} <b>{selectedCategory}</b>
           </p>
         }
+
+        {(searchQuery || selectedCategory) && (
+          <Button 
+            type="primary" 
+            danger 
+            size="small"
+            icon={<ClearOutlined />}
+            onClick={handleResetFilters}
+          >
+            Reset Filters
+          </Button>
+        )}
       </Flex>
       <Table
         className="product_table"
         dataSource={dataSource}
         columns={columns}
         rowKey="id"
+        scroll={{ x: true }}
         pagination={{
           pageSize: parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),
           current: page,

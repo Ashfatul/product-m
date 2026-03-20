@@ -7,11 +7,12 @@ import Home from "../components/Home/Home";
 import HomeSkeleton from "../components/Skeletons/HomeSkeleton";
 import ProductListSkeleton from "../components/Skeletons/ProductListSkeleton";
 import ProductDetailsSkeleton from "../components/Skeletons/ProductDetailsSkeleton";
+import ErrorPage from "../components/ErrorBoundary/ErrorPage";
 
 export const Route = createBrowserRouter([
   {
     path: "/",
-    element: <BaseLayout/>,
+    element: <BaseLayout children={undefined} />,
     children: [
       {
         path: "/",
@@ -27,8 +28,8 @@ export const Route = createBrowserRouter([
       }, 
     ]
   },
-  // {
-  //   path: "*",
-  //   element: <ErrorBoundary />
-  // }
+  {
+    path: "*",
+    element: <BaseLayout><ErrorPage statusCode={404} /></BaseLayout>,
+  }
 ]);
