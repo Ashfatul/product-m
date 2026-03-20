@@ -6,7 +6,7 @@ const getEndpoint = (params: any) => {
     case 'search':
       return '/products/search';
     case 'category':
-      return '/products/category';
+      return `/products/category/${params.category}`;
     default:
       return '/products';
   }
@@ -16,7 +16,7 @@ const useProducts = (params?: any) => {
   const { data, isPending, error } = useQuery({
     queryKey: ['products', params],
     queryFn: () => {
-      const { filter, ...actualParams } = params;
+      const { filter, category, ...actualParams } = params;
       return api.get(getEndpoint(params), { params: actualParams }).then(r => r.data);
     },
   })

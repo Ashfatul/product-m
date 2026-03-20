@@ -6,18 +6,24 @@ import { DownOutlined, UserOutlined, FilterOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Dropdown, message, Space, Tooltip } from 'antd';
 import { useState } from 'react';
+import useProductsCategory from '../../query/productCategoryQuery';
 
 type SearchProps = GetProps<typeof Input.Search>;
 
 export default function ProductList() {
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const { products, isLoading, isError, total } = useProducts({
     limit: parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),
     skip: (page - 1) * parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),
     ...(searchQuery && { filter: 'search', q: searchQuery }),
+    ...(selectedCategory && { filter: 'category', category: selectedCategory }),
   });
+
+  const { category } = useProductsCategory();
+  
   const { Search } = Input;
 
   // DataSource is the array of data that will be displayed in the table.
@@ -65,23 +71,14 @@ export default function ProductList() {
     setPage(1); // Reset to first page on search
   };
 
-  // const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   message.info('Click on left button.');
-  //   console.log('click left button', e);
-  // };
-
   const handleMenuClick: MenuProps['onClick'] = (e) => {
-    message.info('Click on menu item.');
-    console.log('click', e);
+    setSelectedCategory(e.key);
   };
 
-  const items: MenuProps['items'] = [
-    {
-      label: '1st menu item',
-      key: '1',
-      icon: <UserOutlined />,
-    },
-  ];
+  const items: MenuProps['items'] = category?.map((cat: string) => ({
+      label: cat.name,
+      key: cat.slug,
+    })) || [];
 
   const menuProps = {
     items,
@@ -100,10 +97,22 @@ export default function ProductList() {
         </Button>
       </Dropdown>
       </Flex>
-      <Flex justify='center' align='center' style={{ margin: '20px 0' }}>
+      <Flex justify='center' gap='20px' align='center' wrap style={{ marginTop: '20px' }}>
         {searchQuery &&
-        <p>
+        <p className='applied_filter'>
           {searchQuery && 'Showing results for: '} <b>{searchQuery}</b>
+        </p>
+        }
+
+        {searchQuery && selectedCategory &&
+        <p className='applied_filter'>
+          |
+        </p>
+        }
+
+        {selectedCategory &&
+        <p className='applied_filter'>
+          {selectedCategory && 'Filtering by category: '} <b>{selectedCategory}</b>
         </p>
         }
       </Flex>
