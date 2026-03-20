@@ -3,12 +3,17 @@ import ProductList from "../components/ProductList/ProductList";
 import ProductDetails from "../components/ProductDetails/ProductDetails";
 import { Suspense } from "react";
 import BaseLayout from "../layout/BaseLayout";
+import Home from "../components/Home/Home";
 
 export const Route = createBrowserRouter([
   {
     path: "/",
     element: <BaseLayout/>,
     children: [
+      {
+        path: "/",
+        element: <Suspense fallback="Loading..."><Home /></Suspense>,
+      },
       {
         path: "/products",
         element: <Suspense fallback="Loading..."><ProductList /></Suspense>,

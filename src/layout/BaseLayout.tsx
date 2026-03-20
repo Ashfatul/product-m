@@ -38,7 +38,7 @@ const HeaderTitle = styled.h1`
 
 const HeaderSubtitle = styled.p`
   margin: 0.25rem 0 0 0;
-  color: #rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 14px;
 `;
 
@@ -81,10 +81,12 @@ export default function BaseLayout({ children }: { children: React.ReactNode }) 
     <LayoutContainer>
       <Header>
         <HeaderContent>
+          <Link to='/' style={{ textDecoration: 'none' }}>
           <HeaderInfo>
             <HeaderTitle>Product Management</HeaderTitle>
             <HeaderSubtitle>A simple product management app</HeaderSubtitle>
           </HeaderInfo>
+          </Link>
           <Nav>
             <NavLink to="/">Home</NavLink>
             <NavLink to="/products">Products</NavLink>
