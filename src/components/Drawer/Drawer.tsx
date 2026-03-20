@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Col, Drawer, Form, Input, Row, InputNumber, Select, Space, message } from 'antd';
+import { Button, Col, Drawer, Form, Input, Row, InputNumber, Select, Space } from 'antd';
 import type { Product } from '../../types';
-import type { FormInstance } from 'antd';
 
 interface DrawerComponentProps {
   open?: boolean;

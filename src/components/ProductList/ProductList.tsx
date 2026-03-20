@@ -2,10 +2,9 @@ import { Table, type GetProps, Flex } from 'antd';
 import useProducts from '../../query/productQuery';
 import { Link } from 'react-router-dom';
 import { Input } from 'antd';
-import { DownOutlined, UserOutlined, FilterOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Button, Dropdown, message, Space, Tooltip } from 'antd';
-import { useState } from 'react';
+import { Button, Dropdown } from 'antd';
 import useProductsCategory from '../../query/productCategoryQuery';
 import useProductStore from '../../store/store';
 
@@ -19,7 +18,7 @@ export default function ProductList() {
   const selectedCategory = useProductStore((state) => state.selectedCategory);
   const setSelectedCategory = useProductStore((state) => state.setSelectedCategory);
 
-  const { products, isLoading, isError, total } = useProducts({
+  const { products, total } = useProducts({
     limit: parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),
     skip: (page - 1) * parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),
     ...(searchQuery && { filter: 'search', q: searchQuery }),
@@ -79,7 +78,7 @@ export default function ProductList() {
     setSelectedCategory(e.key);
   };
 
-  const items: MenuProps['items'] = category?.map((cat: string) => ({
+  const items: MenuProps['items'] = category?.map((cat: any) => ({
       label: cat.name,
       key: cat.slug,
     })) || [];

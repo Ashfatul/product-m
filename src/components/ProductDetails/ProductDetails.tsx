@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Row, Col, Card, Button, Rate, Badge, Divider, Space, Descriptions, Image, Spin, Empty, message } from "antd";
+import { Row, Col, Card, Button, Rate, Badge, Divider, Space, Descriptions, Image, Empty, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import DrawerComponent from "../Drawer/Drawer";
@@ -11,7 +11,7 @@ export default function ProductDetails() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [displayProduct, setDisplayProduct] = useState<Product | null>(null);
 
-  const { productDetails: product, isLoading, error } = useProductDetails({id});
+  const { productDetails: product } = useProductDetails({id});
 
   const handleEditClick = () => {
     setIsDrawerOpen(true);

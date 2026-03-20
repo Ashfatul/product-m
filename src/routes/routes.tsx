@@ -1,19 +1,26 @@
 import { createBrowserRouter } from "react-router";
 import ProductList from "../components/ProductList/ProductList";
-import Home from "../components/Home/Home";
 import ProductDetails from "../components/ProductDetails/ProductDetails";
+import { Suspense } from "react";
+import BaseLayout from "../layout/BaseLayout";
 
 export const Route = createBrowserRouter([
   {
     path: "/",
-    element: <Home/>,
+    element: <BaseLayout/>,
+    children: [
+      {
+        path: "/products",
+        element: <Suspense fallback="Loading..."><ProductList /></Suspense>,
+      },
+      {
+        path: "/products/:id",
+        element: <Suspense fallback="Loading..."><ProductDetails /></Suspense>,
+      }, 
+    ]
   },
-  {
-    path: "/products",
-    element: <ProductList />,
-  },
-  {
-    path: "/products/:id",
-    element: <ProductDetails />,
-  }
+  // {
+  //   path: "*",
+  //   element: <ErrorBoundary />
+  // }
 ]);
