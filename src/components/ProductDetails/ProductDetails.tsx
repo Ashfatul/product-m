@@ -97,8 +97,8 @@ export default function ProductDetails() {
             <Space orientation="vertical" size="large" style={{ width: "100%" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
                 <div>
-                  <Badge count={displayProduct?.category} style={{ backgroundColor: "#108ee9" }} />
                   <h1 style={{ margin: "0 0 8px 0" }}>{displayProduct?.title}</h1>
+                  <Badge count={displayProduct?.category} style={{ backgroundColor: "#108ee9" }} />
                 </div>
                 <Button 
                   type="primary" 
