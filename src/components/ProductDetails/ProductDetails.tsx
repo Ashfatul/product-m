@@ -1,12 +1,11 @@
 import { useParams } from "react-router-dom";
-import { Row, Col, Card, Button, Rate, Badge, Divider, Space, Descriptions, Image, Empty, message } from "antd";
+import { Row, Col, Card, Button, Rate, Badge, Divider, Space, Image, Empty, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import DrawerComponent from "../Drawer/Drawer";
 import useProductDetails from "../../query/productDetailsQuery";
 import type { Product } from "../../types";
-import { colors, transitions } from "../../theme/colors";
 
 const Container = styled.div`
   padding: 24px;
@@ -175,94 +174,67 @@ const DescriptionSection = styled.div`
   }
 `;
 
-const SpecificationsCard = styled(Card)`
+const SpecificationsGrid = styled.div`
   margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
   @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
     margin-top: 16px;
   }
 
-  .ant-descriptions {
-    width: 100%;
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+`;
 
-    @media (max-width: 768px) {
-      font-size: 13px;
-    }
+const SpecItem = styled.div`
+  padding: 16px;
+  background-color: #fafafa;
+  border-radius: 6px;
+  border: 1px solid #f0f0f0;
+  text-align: center;
 
-    @media (max-width: 480px) {
-      font-size: 13px;
-    }
+  @media (max-width: 480px) {
+    padding: 12px;
+    text-align: left;
+  }
+`;
 
-    .ant-descriptions-item {
-      width: 100%;
+const SpecLabel = styled.div`
+  font-size: 12px;
+  color: #999;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
 
-      @media (max-width: 480px) {
-        padding: 8px 0 !important;
-      }
-    }
+  @media (max-width: 480px) {
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+`;
 
-    .ant-descriptions-row {
-      width: 100%;
-      display: flex;
+const SpecValue = styled.div`
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  word-break: break-word;
 
-      @media (max-width: 768px) {
-        margin-bottom: 12px;
-      }
+  @media (max-width: 768px) {
+    font-size: 15px;
+  }
 
-      @media (max-width: 480px) {
-        display: flex;
-        flex-direction: column;
-        border-bottom: 1px solid #f0f0f0;
-        margin-bottom: 12px;
-        padding-bottom: 12px;
-
-        &:last-child {
-          border-bottom: none;
-          margin-bottom: 0;
-          padding-bottom: 0;
-        }
-      }
-
-      > td {
-        width: 100%;
-        display: table-cell;
-        padding: 12px 16px !important;
-        text-align: left;
-        border: 1px solid #f0f0f0;
-        text-align: center;
-
-        @media (max-width: 480px) {
-          display: block;
-          width: 100%;
-          padding: 8px 0 !important;
-          border: none;
-          border-bottom: none;
-
-          &:first-child {
-            font-weight: 600;
-            color: #666;
-            margin-bottom: 4px;
-          }
-
-          &:last-child {
-            color: #333;
-            font-weight: 500;
-          }
-        }
-      }
-    }
-
-    th {
-      width: 100%;
-      text-align: left;
-      padding: 12px 16px !important;
-
-      @media (max-width: 480px) {
-        padding: 8px 0 !important;
-        font-size: 12px;
-        text-align: center;
-      }
-    }
+  @media (max-width: 480px) {
+    font-size: 14px;
   }
 `;
 
@@ -413,30 +385,24 @@ export default function ProductDetails() {
               </DescriptionSection>
 
               {/* Product Specifications */}
-              <SpecificationsCard>
-                <Descriptions 
-                  bordered 
-                  column={{ xxl: 4, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }}
-                  items={[
-                    {
-                      label: "Category",
-                      children: displayProduct?.category,
-                    },
-                    {
-                      label: "Stock",
-                      children: displayProduct?.stock,
-                    },
-                    {
-                      label: "Product ID",
-                      children: displayProduct?.id,
-                    },
-                    {
-                      label: "Rating",
-                      children: `${displayProduct?.rating} / 5`,
-                    },
-                  ]}
-                />
-              </SpecificationsCard>
+              <SpecificationsGrid>
+                <SpecItem>
+                  <SpecLabel>Category</SpecLabel>
+                  <SpecValue>{displayProduct?.category}</SpecValue>
+                </SpecItem>
+                <SpecItem>
+                  <SpecLabel>Stock</SpecLabel>
+                  <SpecValue>{displayProduct?.stock} items</SpecValue>
+                </SpecItem>
+                <SpecItem>
+                  <SpecLabel>Product ID</SpecLabel>
+                  <SpecValue>{displayProduct?.id}</SpecValue>
+                </SpecItem>
+                <SpecItem>
+                  <SpecLabel>Rating</SpecLabel>
+                  <SpecValue>{displayProduct?.rating} / 5</SpecValue>
+                </SpecItem>
+              </SpecificationsGrid>
             </Space>
           </Card>
         </Col>

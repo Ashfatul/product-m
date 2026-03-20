@@ -1,4 +1,4 @@
-import { Table, type GetProps, Flex } from 'antd';
+import { Table, type GetProps, Flex, type TableColumnsType } from 'antd';
 import useProducts from '../../query/productQuery';
 import { Link } from 'react-router-dom';
 import { Input } from 'antd';
@@ -59,41 +59,41 @@ export default function ProductList() {
   const dataSource = products || [];
 
   // Columns is the array of objects that defines the columns of the table. Each object has a title, dataIndex, and key.
-  const columns = [
+  const columns: TableColumnsType = [
     {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
-      align: 'left',
+      align: 'left' as const,
     },
     {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
-      align: 'center',
+      align: 'center' as const,
     },
     {
       title: 'Rating',
       dataIndex: 'rating',
       key: 'rating',
-      align: 'center',
+      align: 'center' as const,
     },
     {
       title: 'Stock',
       dataIndex: 'stock',
       key: 'stock',
-      align: 'center',
+      align: 'center' as const,
     },
     {
       title: 'Category',
       dataIndex: 'category',
       key: 'category',
-      align: 'center',
+      align: 'center' as const,
     },
     {
       title: 'Action',
       key: 'action',
-      align: 'center',
+      align: 'center' as const,
       render: (_: string, record: Record<string, any>) => (
         <Tooltip title="View Product Details">
           <ActionIconButton to={`/products/${record.id}`}>
