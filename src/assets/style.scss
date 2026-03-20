@@ -30,6 +30,17 @@ $baseFontSize: 16px;
   font-family: $system_font;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  color: $text_primary;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.mb-0{
+    margin-bottom: 0 !important;
+}
+
 body {
   padding: 0;
   background: linear-gradient(135deg, $bg_secondary 0%, $bg_tertiary 100%);
@@ -56,9 +67,27 @@ body {
   }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: $text_primary;
-  margin-bottom: 16px;
-  font-weight: 600;
-  line-height: 1.2;
+.product_table {
+    box-shadow: 0 4px 8px $shadow_color;
+    .ant-table-thead > tr > th {
+        background-color: $system_primary;
+        color: white;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .ant-table-cell::before{
+        display: none;
+    }
+
+     .ant-table-tbody{
+        tr{
+            &:nth-child(even){
+                background-color: $bg_tertiary;
+            }
+             td{
+                text-align: center;
+             }
+        }
+     }
 }

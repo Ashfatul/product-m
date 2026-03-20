@@ -51,7 +51,7 @@ export default function ProductList() {
   });
 
   const { category } = useProductsCategory();
-  
+
   const { Search } = Input;
 
   // DataSource is the array of data that will be displayed in the table.
@@ -114,9 +114,9 @@ export default function ProductList() {
   };
 
   const items: MenuProps['items'] = category?.map((cat: any) => ({
-      label: cat.name,
-      key: cat.slug,
-    })) || [];
+    label: cat.name,
+    key: cat.slug,
+  })) || [];
 
   const menuProps = {
     items,
@@ -126,46 +126,48 @@ export default function ProductList() {
 
   return (
     <div>
-      <h1>Product List</h1>
-      <Flex gap="10px" justify='center' align='center'>
-      <Search placeholder="input search text" allowClear onSearch={onSearch} style={{width: '300px'}} />
-      <Dropdown menu={menuProps}>
-        <Button icon={<DownOutlined />} iconPlacement="end">
-          Filter By Category
-        </Button>
-      </Dropdown>
+      <Flex gap="10px" justify='space-between' align='center' wrap>
+        <h1 className='mb-0'>Product List</h1>
+        <Flex gap='10px' align='center'>
+          <Search placeholder="input search text" allowClear onSearch={onSearch} style={{ width: '300px' }} />
+          <Dropdown menu={menuProps}>
+            <Button icon={<DownOutlined />} iconPlacement="end">
+              Filter By Category
+            </Button>
+          </Dropdown>
+        </Flex>
       </Flex>
       <Flex justify='center' gap='20px' align='center' wrap style={{ marginTop: '20px' }}>
         {searchQuery &&
-        <p className='applied_filter'>
-          {searchQuery && 'Showing results for: '} <b>{searchQuery}</b>
-        </p>
+          <p className='applied_filter'>
+            {searchQuery && 'Showing results for: '} <b>{searchQuery}</b>
+          </p>
         }
 
         {searchQuery && selectedCategory &&
-        <p className='applied_filter'>
-          |
-        </p>
+          <p className='applied_filter'>
+            |
+          </p>
         }
 
         {selectedCategory &&
-        <p className='applied_filter'>
-          {selectedCategory && 'Filtering by category: '} <b>{selectedCategory}</b>
-        </p>
+          <p className='applied_filter'>
+            {selectedCategory && 'Filtering by category: '} <b>{selectedCategory}</b>
+          </p>
         }
       </Flex>
-      <Table 
-      className='product_table'
-      dataSource={dataSource} 
-      columns={columns} 
-      rowKey="id"
-      pagination={{ 
-        pageSize: parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),
-        current: page,
-        total: total,
-        showSizeChanger: false,
-        onChange: (page) => setPage(page)
-      }}
+      <Table
+        className="product_table"
+        dataSource={dataSource}
+        columns={columns}
+        rowKey="id"
+        pagination={{
+          pageSize: parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),
+          current: page,
+          total: total,
+          showSizeChanger: false,
+          onChange: (page) => setPage(page)
+        }}
       />
     </div>
   );
