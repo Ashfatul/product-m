@@ -2,7 +2,7 @@ import { Table, type GetProps, Flex } from 'antd';
 import useProducts from '../../query/productQuery';
 import { Link } from 'react-router-dom';
 import { Input } from 'antd';
-import { DownOutlined, UserOutlined } from '@ant-design/icons';
+import { DownOutlined, UserOutlined, FilterOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Dropdown, message, Space, Tooltip } from 'antd';
 import { useState } from 'react';
@@ -65,10 +65,10 @@ export default function ProductList() {
     setPage(1); // Reset to first page on search
   };
 
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    message.info('Click on left button.');
-    console.log('click left button', e);
-  };
+  // const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   message.info('Click on left button.');
+  //   console.log('click left button', e);
+  // };
 
   const handleMenuClick: MenuProps['onClick'] = (e) => {
     message.info('Click on menu item.');
@@ -80,24 +80,6 @@ export default function ProductList() {
       label: '1st menu item',
       key: '1',
       icon: <UserOutlined />,
-    },
-    {
-      label: '2nd menu item',
-      key: '2',
-      icon: <UserOutlined />,
-    },
-    {
-      label: '3rd menu item',
-      key: '3',
-      icon: <UserOutlined />,
-      danger: true,
-    },
-    {
-      label: '4rd menu item',
-      key: '4',
-      icon: <UserOutlined />,
-      danger: true,
-      disabled: true,
     },
   ];
 
@@ -113,10 +95,17 @@ export default function ProductList() {
       <Flex gap="10px" justify='center' align='center'>
       <Search placeholder="input search text" allowClear onSearch={onSearch} style={{width: '300px'}} />
       <Dropdown menu={menuProps}>
-        <Button onClick={handleButtonClick} icon={<DownOutlined />} iconPlacement="end">
-          Button
+        <Button icon={<DownOutlined />} iconPlacement="end">
+          Filter By Category
         </Button>
       </Dropdown>
+      </Flex>
+      <Flex justify='center' align='center' style={{ margin: '20px 0' }}>
+        {searchQuery &&
+        <p>
+          {searchQuery && 'Showing results for: '} <b>{searchQuery}</b>
+        </p>
+        }
       </Flex>
       <Table 
       className='product_table'
