@@ -57,7 +57,7 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
           },
         }}
         extra={
-          <Space>
+          <Space orientation="horizontal" size="middle">
             <Button onClick={handleClose}>Cancel</Button>
             <Button onClick={handleSubmit} type="primary">
               Submit

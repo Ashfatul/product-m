@@ -42,7 +42,7 @@ export default function ProductDetails() {
         <Col xs={24} sm={24} md={14}>
           <Card>
             {/* Title and Edit Button */}
-            <Space direction="vertical" size="large" style={{ width: "100%" }}>
+            <Space orientation="vertical" size="large" style={{ width: "100%" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
                 <div>
                   <h1 style={{ margin: "0 0 8px 0" }}>{product.title}</h1>
