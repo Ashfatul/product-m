@@ -7,13 +7,17 @@ import type { MenuProps } from 'antd';
 import { Button, Dropdown, message, Space, Tooltip } from 'antd';
 import { useState } from 'react';
 import useProductsCategory from '../../query/productCategoryQuery';
+import useProductStore from '../../store/store';
 
 type SearchProps = GetProps<typeof Input.Search>;
 
 export default function ProductList() {
-  const [page, setPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const page = useProductStore((state) => state.page);
+  const setPage = useProductStore((state) => state.setPage);
+  const searchQuery = useProductStore((state) => state.searchQuery);
+  const setSearchQuery = useProductStore((state) => state.setSearchQuery);
+  const selectedCategory = useProductStore((state) => state.selectedCategory);
+  const setSelectedCategory = useProductStore((state) => state.setSelectedCategory);
 
   const { products, isLoading, isError, total } = useProducts({
     limit: parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),

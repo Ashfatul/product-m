@@ -45,8 +45,8 @@ export default function ProductDetails() {
             <Space orientation="vertical" size="large" style={{ width: "100%" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
                 <div>
-                  <h1 style={{ margin: "0 0 8px 0" }}>{product.title}</h1>
                   <Badge count={product.category} style={{ backgroundColor: "#108ee9" }} />
+                  <h1 style={{ margin: "0 0 8px 0" }}>{product.title}</h1>
                 </div>
                 <Button 
                   type="primary" 
@@ -57,20 +57,25 @@ export default function ProductDetails() {
                 </Button>
               </div>
 
-              <Divider style={{ margin: "12px 0" }} />
+              {/* Price */}
+              <div style={{ backgroundColor: "#fafafa", padding: "16px", borderRadius: "4px" }}>
+                <h2 style={{ color: "#f5222d", fontSize: "40px" }}>${product.price.toFixed(2)}</h2>
+              </div>
 
               {/* Product Metrics */}
               <Row gutter={16}>
-                <Col xs={12}>
+                <Col xs={24} sm={12}>
                   <div>
                     <strong style={{ fontSize: "14px", color: "#999" }}>Rating</strong>
                     <div style={{ marginTop: "8px" }}>
                       <Rate value={product.rating} disabled allowHalf />
+                      <br />
+                      <span>{product.rating} / 5</span>
                       <span style={{ marginLeft: "8px" }}>({Array.isArray(product.reviews) ? product.reviews.length : product.reviews} reviews)</span>
                     </div>
                   </div>
                 </Col>
-                <Col xs={12}>
+                <Col xs={24} sm={12}>
                   <div>
                     <strong style={{ fontSize: "14px", color: "#999" }}>Stock Status</strong>
                     <div style={{ marginTop: "8px" }}>
@@ -89,12 +94,6 @@ export default function ProductDetails() {
               <div>
                 <strong style={{ fontSize: "14px", color: "#999" }}>Description</strong>
                 <p style={{ marginTop: "8px", lineHeight: "1.6" }}>{product.description}</p>
-              </div>
-
-              {/* Price */}
-              <div style={{ backgroundColor: "#fafafa", padding: "16px", borderRadius: "4px" }}>
-                <strong style={{ fontSize: "14px", color: "#999" }}>Price</strong>
-                <h2 style={{ margin: "8px 0 0 0", color: "#f5222d" }}>${product.price.toFixed(2)}</h2>
               </div>
 
               {/* Product Specifications */}
