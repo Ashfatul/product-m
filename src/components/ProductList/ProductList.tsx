@@ -2,13 +2,36 @@ import { Table, type GetProps, Flex } from 'antd';
 import useProducts from '../../query/productQuery';
 import { Link } from 'react-router-dom';
 import { Input } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, EyeOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Button, Dropdown } from 'antd';
+import { Button, Dropdown, Tooltip } from 'antd';
 import useProductsCategory from '../../query/productCategoryQuery';
 import useProductStore from '../../store/store';
+import styled from 'styled-components';
 
 type SearchProps = GetProps<typeof Input.Search>;
+
+const ActionIconButton = styled(Link)`
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
+  border-radius: 4px;
+  color: #1890ff;
+  transition: all 0.3s ease;
+  height: 32px;
+  width: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #1890ff;
+  
+  &:hover {
+    background-color: #e6f7ff;
+    color: #0050b3;
+  }
+  
+  font-size: 16px;
+`;
 
 export default function ProductList() {
   const page = useProductStore((state) => state.page);
@@ -38,32 +61,42 @@ export default function ProductList() {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
+      align: 'left',
     },
     {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
+      align: 'center',
     },
     {
       title: 'Rating',
       dataIndex: 'rating',
       key: 'rating',
+      align: 'center',
     },
     {
       title: 'Stock',
       dataIndex: 'stock',
       key: 'stock',
+      align: 'center',
     },
     {
       title: 'Category',
       dataIndex: 'category',
       key: 'category',
+      align: 'center',
     },
     {
       title: 'Action',
       key: 'action',
+      align: 'center',
       render: (_: string, record: Record<string, any>) => (
-        <Link to={`/products/${record.id}`}>View Details</Link>
+        <Tooltip title="View Product Details">
+          <ActionIconButton to={`/products/${record.id}`}>
+            <EyeOutlined />
+          </ActionIconButton>
+        </Tooltip>
       ),
     }
   ];

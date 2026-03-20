@@ -1,12 +1,23 @@
+$system_primary: var(--primary-color, #1890ff);
+$system_secondary: var(--secondary-color, #5555559c);
+$system_font: var(--font-family, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
+$system_bg: var(--background-color, #ffffff);
+$system_text: var(--text-color, #000000);
+$baseFontSize: 16px;
+
+
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: $system_font;
 }
 
 body{
     padding: 0px;
+    background-color: $system_bg;
+    color: $system_text;
+    font-size: $baseFontSize;
 }
 
 .product_table{
@@ -15,7 +26,7 @@ body{
 
 .applied_filter {
     font-size: 14px;
-    color: #5555559c;
+    color: $system_secondary;
     font-weight: 300;
     font-style: italic;
 
@@ -23,4 +34,11 @@ body{
         text-decoration: underline;
         font-weight: 600;
     }
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: $system_text;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 1.2;
 }

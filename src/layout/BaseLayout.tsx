@@ -9,15 +9,18 @@ const LayoutContainer = styled.div`
 
 const Header = styled.header`
   background-color: #001529;
-  padding: 1rem;
+  padding: 1rem 0;
   color: white;
   position: sticky;
   top: 0;
   z-index: 3;
+  text-align: center;
 `;
 
 const HeaderTitle = styled.h1`
   margin: 0;
+  color: #fff;
+  font-size: 24px;
 `;
 
 const Main = styled.main`
@@ -40,6 +43,7 @@ export default function BaseLayout({ children }: { children: React.ReactNode }) 
     <LayoutContainer>
       <Header>
         <HeaderTitle>Product Management</HeaderTitle>
+        <p>A simple product management app</p>
       </Header>
       <Main>
         {children || <Outlet />}
