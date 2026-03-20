@@ -8,8 +8,6 @@ interface DrawerComponentProps {
   product?: any;
 }
 
-
-
 export default function DrawerComponent({ open: externalOpen, onClose: externalOnClose, product }: DrawerComponentProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [form] = Form.useForm();
@@ -19,6 +17,7 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
   const handleClose = externalOnClose || (() => setInternalOpen(false));
   const handleSubmit = async () => {
     try {
+      const productInfo = product;
       const values = await form.validateFields();
       console.log('Form values:', values);
       message.success('Product updated successfully');
@@ -33,6 +32,7 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
     if (product) {
       form.setFieldsValue({
         title: product.title,
+        imageUrl: product.thumbnail,
         price: product.price,
         stock: product.stock,
         category: product.category,
@@ -42,7 +42,8 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
     } else {
       form.resetFields();
     }
-  }, [product, form]);
+  }, [product, form]); 
+
 
   return (
     <>
@@ -74,6 +75,17 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
                 rules={[{ required: true, message: 'Please enter product title' }]}
               >
                 <Input placeholder="Enter product title" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="imageUrl"
+                label="Thumbnail Image URL"
+                rules={[{ required: true, message: 'Please enter thumbnail image URL' }]}
+              >
+                <Input placeholder="Enter image URL" />
               </Form.Item>
             </Col>
           </Row>
