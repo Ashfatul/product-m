@@ -63,7 +63,7 @@ export default function ProductList() {
     {
       title: 'Action',
       key: 'action',
-      render: (_: any, record: any) => (
+      render: (_: string, record: Record<string, any>) => (
         <Link to={`/products/${record.id}`}>View Details</Link>
       ),
     }

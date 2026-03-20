@@ -4,11 +4,12 @@ import { EditOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import DrawerComponent from "../Drawer/Drawer";
 import useProductDetails from "../../query/productDetailsQuery";
+import type { Product } from "../../types";
 
 export default function ProductDetails() {
   const { id } = useParams();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [displayProduct, setDisplayProduct] = useState<any>(null);
+  const [displayProduct, setDisplayProduct] = useState<Product | null>(null);
 
   const { productDetails: product, isLoading, error } = useProductDetails({id});
 
@@ -25,8 +26,8 @@ export default function ProductDetails() {
       // if in localstorage there is a modified product with the same id, use that instead of the fetched product
       const modifiedProducts = localStorage.getItem('modifiedProducts');
       if (modifiedProducts) {
-        const modifiedProductsArray = JSON.parse(modifiedProducts);
-        const modifiedProduct = modifiedProductsArray.find((p: any) => p.id === product.id);
+        const modifiedProductsArray: Product[] = JSON.parse(modifiedProducts);
+        const modifiedProduct = modifiedProductsArray.find((p: Product) => p.id === product.id);
         if (modifiedProduct) {
           setDisplayProduct(modifiedProduct);
           message.info('Showing your local changes for this product');
@@ -43,8 +44,8 @@ export default function ProductDetails() {
       if (product) {
         const modifiedProducts = localStorage.getItem('modifiedProducts');
         if (modifiedProducts) {
-          const modifiedProductsArray = JSON.parse(modifiedProducts);
-          const modifiedProduct = modifiedProductsArray.find((p: any) => p.id === product.id);
+          const modifiedProductsArray: Product[] = JSON.parse(modifiedProducts);
+          const modifiedProduct = modifiedProductsArray.find((p: Product) => p.id === product.id);
           if (modifiedProduct) {
             setDisplayProduct(modifiedProduct);
           }
@@ -60,8 +61,8 @@ export default function ProductDetails() {
     if (product) {
       const modifiedProducts = localStorage.getItem('modifiedProducts');
       if (modifiedProducts) {
-        const modifiedProductsArray = JSON.parse(modifiedProducts);
-        const modifiedProduct = modifiedProductsArray.find((p: any) => p.id === product.id);
+        const modifiedProductsArray: Product[] = JSON.parse(modifiedProducts);
+        const modifiedProduct = modifiedProductsArray.find((p: Product) => p.id === product.id);
         if (modifiedProduct) {
           message.success('Product updated successfully');
           setDisplayProduct(modifiedProduct);

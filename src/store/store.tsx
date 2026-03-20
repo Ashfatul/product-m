@@ -1,6 +1,7 @@
 import { create } from 'zustand'
+import type { ProductStoreState } from '../types'
 
-const useProductStore = create((set) => ({
+const useProductStore = create<ProductStoreState>((set) => ({
     // state
     perPageProducts: Number(import.meta.env.VITE_PER_PAGE_PRODUCTS) || 10,
     searchQuery: '',
@@ -8,10 +9,10 @@ const useProductStore = create((set) => ({
     page: 1,
 
     // actions
-    setSearchQuery: (query) => set({ searchQuery: query }),
-    setSelectedCategory: (category) => set({ selectedCategory: category }),
+    setSearchQuery: (query: string) => set({ searchQuery: query }),
+    setSelectedCategory: (category: string | null) => set({ selectedCategory: category }),
     resetFilters: () => set({ searchQuery: '', selectedCategory: null }),
-    setPage: (page) => set({ page }),
+    setPage: (page: number) => set({ page }),
 }))
 
 export default useProductStore;

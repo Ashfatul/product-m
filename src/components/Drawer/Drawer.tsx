@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Col, Drawer, Form, Input, Row, InputNumber, Select, Space, message } from 'antd';
+import type { Product } from '../../types';
+import type { FormInstance } from 'antd';
 
 interface DrawerComponentProps {
   open?: boolean;
   onClose?: () => void;
-  product?: any;
+  product?: Product | null;
   onProductUpdate?: () => void;
 }
 
@@ -21,10 +23,10 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
       const values = await form.validateFields();
 
       const modifiedProducts = localStorage.getItem('modifiedProducts');
-      const modifiedProductsArray = modifiedProducts ? JSON.parse(modifiedProducts) : [];
+      const modifiedProductsArray: Product[] = modifiedProducts ? JSON.parse(modifiedProducts) : [];
 
-      const updatedProduct = {
-        ...product,
+      const updatedProduct: Product = {
+        ...product!,
         title: values.title,
         images: [values.imageUrl],
         price: values.price,
@@ -34,7 +36,7 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
         description: values.description,
       };
 
-      const index = modifiedProductsArray.findIndex((p: any) => p.id === product.id);
+      const index = modifiedProductsArray.findIndex((p: Product) => p.id === product?.id);
 
       if (index !== -1) {
         modifiedProductsArray[index] = updatedProduct;
