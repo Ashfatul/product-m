@@ -6,9 +6,10 @@ interface DrawerComponentProps {
   open?: boolean;
   onClose?: () => void;
   product?: any;
+  onProductUpdate?: () => void;
 }
 
-export default function DrawerComponent({ open: externalOpen, onClose: externalOnClose, product }: DrawerComponentProps) {
+export default function DrawerComponent({ open: externalOpen, onClose: externalOnClose, product, onProductUpdate }: DrawerComponentProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [form] = Form.useForm();
 
@@ -23,9 +24,9 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
       const modifiedProductsArray = modifiedProducts ? JSON.parse(modifiedProducts) : [];
 
       const updatedProduct = {
-        id: product.id,
+        ...product,
         title: values.title,
-        thumbnail: values.imageUrl,
+        images: [values.imageUrl],
         price: values.price,
         stock: values.stock,
         category: values.category,
@@ -42,8 +43,15 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
       }
 
       localStorage.setItem('modifiedProducts', JSON.stringify(modifiedProductsArray));
+      
+      // Trigger storage event for other tabs/windows
+      window.dispatchEvent(new Event('storage'));
 
-      message.success('Product updated successfully');
+      // Notify parent component of update
+      if (onProductUpdate) {
+        onProductUpdate();
+      }
+
       handleClose();
     } catch (error) {
       console.error('Validation failed:', error);
@@ -55,7 +63,7 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
     if (product) {
       form.setFieldsValue({
         title: product.title,
-        imageUrl: product.images[0],
+        imageUrl: product.images?.[0] || product.thumbnail,
         price: product.price,
         stock: product.stock,
         category: product.category,
@@ -65,7 +73,7 @@ export default function DrawerComponent({ open: externalOpen, onClose: externalO
     } else {
       form.resetFields();
     }
-  }, [product, form]); 
+  }, [product, form, isOpen]); 
 
 
   return (

@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Row, Col, Card, Button, Rate, Badge, Divider, Space, Descriptions, Image, Spin, Empty } from "antd";
+import { Row, Col, Card, Button, Rate, Badge, Divider, Space, Descriptions, Image, Spin, Empty, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import DrawerComponent from "../Drawer/Drawer";
@@ -26,15 +26,49 @@ export default function ProductDetails() {
       const modifiedProducts = localStorage.getItem('modifiedProducts');
       if (modifiedProducts) {
         const modifiedProductsArray = JSON.parse(modifiedProducts);
-        const modifiedProduct = modifiedProductsArray.find((p: any) => p.id === displayProduct?.id);
+        const modifiedProduct = modifiedProductsArray.find((p: any) => p.id === product.id);
         if (modifiedProduct) {
           setDisplayProduct(modifiedProduct);
+          message.info('Showing your local changes for this product');
           return;
         }
       }
       setDisplayProduct(product);
     }
   }, [product]);
+
+  // Listen for storage changes to update on save
+  useEffect(() => {
+    const handleStorageChange = () => {
+      if (product) {
+        const modifiedProducts = localStorage.getItem('modifiedProducts');
+        if (modifiedProducts) {
+          const modifiedProductsArray = JSON.parse(modifiedProducts);
+          const modifiedProduct = modifiedProductsArray.find((p: any) => p.id === product.id);
+          if (modifiedProduct) {
+            setDisplayProduct(modifiedProduct);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [product]);
+
+  const handleProductUpdate = () => {
+    if (product) {
+      const modifiedProducts = localStorage.getItem('modifiedProducts');
+      if (modifiedProducts) {
+        const modifiedProductsArray = JSON.parse(modifiedProducts);
+        const modifiedProduct = modifiedProductsArray.find((p: any) => p.id === product.id);
+        if (modifiedProduct) {
+          message.success('Product updated successfully');
+          setDisplayProduct(modifiedProduct);
+        }
+      }
+    }
+  };
 
   if (!displayProduct) {
     return <Empty description="Product not found" />;
@@ -145,7 +179,8 @@ export default function ProductDetails() {
       <DrawerComponent 
         open={isDrawerOpen} 
         onClose={handleCloseDrawer}
-        product={product}
+        product={displayProduct}
+        onProductUpdate={handleProductUpdate}
       />
     </div>
   );
