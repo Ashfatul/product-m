@@ -5,11 +5,16 @@ import { Input } from 'antd';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Dropdown, message, Space, Tooltip } from 'antd';
+import { useState } from 'react';
 
 type SearchProps = GetProps<typeof Input.Search>;
 
 export default function ProductList() {
-  const { products, isLoading, isError } = useProducts();
+  const [page, setPage] = useState(1);
+  const { products, isLoading, isError, total } = useProducts({
+    limit: parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),
+    skip: (page - 1) * parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),
+  });
   const { Search } = Input;
 
   // DataSource is the array of data that will be displayed in the table.
@@ -52,7 +57,6 @@ export default function ProductList() {
   ];
 
   // onSearch is the function that will be called when the user clicks the search button. It takes the value of the search input and logs it to the console.
-
   const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -106,7 +110,18 @@ export default function ProductList() {
           Button
         </Button>
       </Dropdown>
-      <Table dataSource={dataSource} columns={columns} rowKey="id" />
+      <Table 
+      dataSource={dataSource} 
+      columns={columns} 
+      rowKey="id"
+      pagination={{ 
+        pageSize: parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE),
+        current: page,
+        total: total,
+        showSizeChanger: false,
+        onChange: (page) => setPage(page)
+      }}
+      />
     </div>
   );
 }
